@@ -1,38 +1,124 @@
+:root {
+  --h0: 100px; 
+  --h1: 100px; 
+  --h2: 100px; 
+  --h3: 100px; 
+  --h4: 100px; 
+  --w0: 100px; 
+  --w1: 100px; 
+  --w2: 100px; 
+  --w3: 100px; 
+  --w4: 100px; 
+  overflow: hidden;
+ }
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+@keyframes circleanim {
+  0%   {background-color:yellow; left: var(--w0); top:var(--h0);}
+  25%  {background-color:yellow; left: var(--w1); top: var(--h1);}
+  50%  {background-color:yellow; left: var(--w2); top: var(--h2);}
+  75%  {background-color:yellow; left: var(--w3); top: var(--h3);}
+  100% {background-color:yellow; left: var(--w0); top:var(--h0);}
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.fadein {
+  opacity: 1 !important;  
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.fadeout {  
+  opacity: 0 !important;
+}
+
+.player-wrapper {
+  width: auto; 
+  height: auto;
+}
+
+.react-player {
+  padding-top: 56.25%; 
+  position: relative;
+}
+
+.react-player > div {
+  position: absolute;
+}
+
+.screensaver-container {
+  opacity: 0.0;
+  transition: all 2s ease-in;
+  position: absolute;
+  background-color: black;
+  height: 100vh;
+  width: 100vw;
+} 
+
+.circle {
+  z-index: 3;
+  position: absolute;
+  top: -60px;
+  right: -30px;
+  width: 180px;
+  height: 180px;
+  border-radius: 90px;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.circle.c0 {
+  width: 140px;
+  height: 140px;
+  border-radius: 70px;
+  background: -webkit-gradient(linear, left top, right top, from(rgba(255,50,0,0.5)), to(rgba(50,50,192,1)));
+  background: linear-gradient(to bottom, rgba(255,50,0,0.5), rgba(50,50,192,1));
+  animation-duration: 14s;
+  animation-name: circleanim;
+}
+
+.circle.c1 {
+  background: -webkit-gradient(linear, left top, right top, from(rgba(49,207,171,0.5)), to(#50e3c2));
+  background: linear-gradient(to right, rgba(49,207,171,0.5), #50e3c2);
+  animation-duration: 10s;
+  animation-name: circleanim;
+}
+
+.circle.c2 {
+  width: 140px;
+  height: 140px;
+  border-radius: 70px;
+  background: -webkit-gradient(linear, left top, right top, from(rgba(49,207,171,0.5)), to(#50e3c2));
+  background: linear-gradient(to right, rgba(255,207,171,0.5),rgba(0,207,171,0.5));
+  animation-duration: 25s;
+  animation-name: circleanim;
+}
+
+.app-overlay {
+  z-index: 2;
+  position: absolute;
+  height: 100vw;
+  width: 100vw;
+  background-color: rgb(0,0,0, 0);
+}
+
+.idle-container {
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+}
+
+.video-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  justify-content: space-around;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.video-player-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
