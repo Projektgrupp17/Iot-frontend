@@ -29,7 +29,7 @@ class App extends Component {
   }
 
   componentDidUpdate(_, prevState) {
-    if (prevState.appState != this.state.appState) {
+    if (prevState.appState !== this.state.appState) {
       this.changeState(this.state.appState);
     }
   }
@@ -150,7 +150,7 @@ class App extends Component {
   creditRemove = () => {
     return fetch(`${baseUrl}/views/${this.getCurrentId()}/${this.state.video.videoId}/${this.state.video.order}`, { method: 'POST' })
       .then(resp => {
-        if (resp.status != 200)
+        if (resp.status !== 200)
           console.error("Unexpected return status from remove credits: " + resp.status);
         return resp.json();
       })
