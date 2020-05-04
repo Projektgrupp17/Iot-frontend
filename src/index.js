@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+//initialize the css random values
 setTimeout(() => {
   for(let i = 0; i < 3; i++) {
     for(let j = 0; j < 4; j++) {
@@ -11,8 +12,7 @@ setTimeout(() => {
       window.document.getElementById("circle" + i).style.setProperty('--h' + j,( Math.random() * (window.innerHeight - 100)).toFixed(0) + "px");
     }
   }
-},
-50);
+}, 50);
 
 ReactDOM.render(
   <React.StrictMode>
