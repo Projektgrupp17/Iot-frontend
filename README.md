@@ -1,3 +1,8 @@
+# Iot-frontend
+This is the ad-presenter that would run on a raspberry pi or similar in the retail environment. 
+
+Plays videos when given an url by the backend, and logs them.
+
 ![Node.js CI](https://github.com/Projektgrupp17/Iot-frontend/workflows/Node.js%20CI/badge.svg)
 
 
