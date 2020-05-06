@@ -16,8 +16,8 @@ setTimeout(() => {
 
 ReactDOM.render(
   <React.StrictMode>
-    <div id="upper-curtain" className ="curtain upper" id="upper-curtain"/>
-    <div id="upper-curtain" className="curtain lower" id="lower-curtain"/>
+    <div className ="curtain upper" id="upper-curtain"/>
+    <div className="curtain lower" id="lower-curtain"/>
     <div className="screensaver-container" id="screensaver">
       <div className="circle c0" id="circle0"/>
       <div className="circle c1" id="circle1"/>
