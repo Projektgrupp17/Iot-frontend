@@ -22,6 +22,8 @@ class App extends Component {
 
   componentDidMount() {
     this.screensaver = window.document.getElementById("screensaver");
+    this.lowerCurtain = window.document.getElementById("lower-curtain");
+    this.upperCurtain = window.document.getElementById("upper-curtain");
     //For some reason video player does not autoplay reliably if first play is too fast.
     if (this.getCurrentId() != null) {
       setTimeout(() => { this.setState({ ...this.state, appState: IDLE }) }, 1);
@@ -34,13 +36,25 @@ class App extends Component {
     }
   }
 
+  hideCurtain() {
+    if(this.upperCurtain != null)
+    this.upperCurtain.classList.add("hidden");
+    this.lowerCurtain.classList.add("hidden");
+  }
+
+  showCurtain() {
+    if(this.upperCurtain != null)
+    this.lowerCurtain.classList.remove("hidden");
+    this.upperCurtain.classList.remove("hidden");
+  }
+
   hideScreensaver() {
     if (this.screensaver != null) {
       this.screensaver.classList.remove("fadein");
       this.screensaver.classList.add("fadeout");
     }
   }
-
+  
   showScreenSaver() {
     if (this.screensaver != null) {
       this.screensaver.classList.remove("fadeout");
@@ -49,9 +63,11 @@ class App extends Component {
   }
 
   onProgress = (progress) => {
-    //start fading out at < 2 seconds left
+    //start fading out when video almost done
     let timeleftSec = -(progress.playedSeconds - progress.playedSeconds / progress.played);
-    if (timeleftSec < 2.0)
+    if (timeleftSec < 5)
+      this.showCurtain();
+    if (timeleftSec < 3)
       this.showScreenSaver();
   }
 
@@ -106,8 +122,10 @@ class App extends Component {
   video = () => {
     return (
       <div className="video-container">
-        <div className="video-player-box">
+        <div className="video-player-box" id="video-box">
           <ReactPlayer
+            onPlay={() => {this.hideCurtain()}}
+            showinfo="false"
             width="1280px"
             height="720px"
             url={this.state.video.url}
