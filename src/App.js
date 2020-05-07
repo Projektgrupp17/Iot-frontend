@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactPlayer from 'react-player'
 import './App.css';
 
-const debug = true;
+const debug = false;
 const LOGIN = "LOGIN";
 const IDLE = "IDLE";
 const PLAYING = "PLAYING";
@@ -98,12 +98,13 @@ class App extends Component {
         setTimeout(() => this.Poll(), this.initialPollWait);
         this.showScreenSaver();
         break;
-        case PLAYING:
-          this.hideScreensaver();
-          break;
-          case LOGIN:
-            this.showCurtain();
-            this.showScreenSaver();
+      case PLAYING:
+        this.hideScreensaver();
+        break;
+      case LOGIN:
+        this.showCurtain();
+        this.showScreenSaver();
+        break;
       default: return
     }
   }
