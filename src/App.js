@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactPlayer from 'react-player'
 import './App.css';
 
-const debug = false;
+const debug = true;
 const LOGIN = "LOGIN";
 const IDLE = "IDLE";
 const PLAYING = "PLAYING";
@@ -16,7 +16,9 @@ class App extends Component {
       appState: LOGIN,
       url: '',
       order: '',
+      loginFieldValue: null
     }
+    window.onmousemove = this.onMouseMove.bind(this);
     this.initialPollWait = 3000;
   }
 
@@ -37,15 +39,17 @@ class App extends Component {
   }
 
   hideCurtain() {
-    if(this.upperCurtain != null)
-    this.upperCurtain.classList.add("hidden");
-    this.lowerCurtain.classList.add("hidden");
+    if(this.upperCurtain != null) {
+      this.upperCurtain.classList.add("hidden");
+      this.lowerCurtain.classList.add("hidden");
+    }
   }
 
   showCurtain() {
-    if(this.upperCurtain != null)
-    this.lowerCurtain.classList.remove("hidden");
-    this.upperCurtain.classList.remove("hidden");
+    if(this.upperCurtain != null) {
+      this.lowerCurtain.classList.remove("hidden");
+      this.upperCurtain.classList.remove("hidden");
+    }
   }
 
   hideScreensaver() {
@@ -53,6 +57,10 @@ class App extends Component {
       this.screensaver.classList.remove("fadein");
       this.screensaver.classList.add("fadeout");
     }
+  }
+
+  getCurrentId() {
+    return window.localStorage.getItem("id");
   }
   
   showScreenSaver() {
@@ -90,28 +98,46 @@ class App extends Component {
         setTimeout(() => this.Poll(), this.initialPollWait);
         this.showScreenSaver();
         break;
-      case PLAYING:
-        this.hideScreensaver();
-        break;
-      case LOGIN: return
+        case PLAYING:
+          this.hideScreensaver();
+          break;
+          case LOGIN:
+            this.showCurtain();
+            this.showScreenSaver();
       default: return
     }
   }
 
-  getCurrentId() {
-    return window.localStorage.getItem("id");
-  }
-
   appInnerWindow() {
+    let innerComponent;
     switch (this.state.appState) {
-      case IDLE: return <this.idle />
-      case PLAYING: return <this.video />
-      case LOGIN: return <div>UNIMPLEMENTED</div>
-      default: return <this.error />
+      case IDLE: innerComponent = <this.idle />; break;
+      case PLAYING: innerComponent = <this.video />; break;
+      case LOGIN: innerComponent = <this.login/>; break;
+      default: innerComponent = <this.error />
     }
+    return(
+    <div>
+      <this.logoutButton/>
+      {innerComponent}
+    </div>
+    )
   }
 
   render = this.appInnerWindow;
+
+  login = () => {
+    return (
+      <div className="login-container">
+        <div className ="login-box">
+          <div className="login-content">
+          <input type="text" placeholder="Enter the ID of this display" onChange={(e) => {this.onTextChanged(e.target.value)}} id="login-input"/>
+            <button onClick={() => {this.setLoggedInId()}} style={{marginLeft: "1em"}} id="login-button">LOG IN</button>
+          </div>
+          </div>
+      </div>
+    )
+  }
 
   error = () => <div style={{ color: "red", fontSize: "21px" }}>ERROR NO STATE</div>
 
@@ -119,8 +145,11 @@ class App extends Component {
 
   idle = () => <div className="idle-container" />
 
+  logoutButton = () => (<button className="moving-button" onClick={() => {this.logout()}} id="logout-button">LOG OUT</button>)
+
   video = () => {
     return (
+    <div>
       <div className="video-container">
         <div className="video-player-box" id="video-box">
           <ReactPlayer
@@ -135,6 +164,8 @@ class App extends Component {
             id="video-player" />
         </div>
       </div>
+      {this.logoutButton()}
+    </div>
     )
   }
 
@@ -163,6 +194,37 @@ class App extends Component {
         console.error(e);
         return pollOnTimeout();
       })
+  }
+
+  onMouseMove() {
+    clearTimeout(this.logoutButtonTimeRef);
+    let btn = window.document.getElementById("logout-button");
+    if(btn !== null && this.state.appState !== LOGIN) {
+      btn.classList.add("shown");
+      this.logoutButtonTimeRef = setTimeout(() => {
+      btn.classList.remove("shown")}, 2000)
+    }
+  }
+  
+  onTextChanged(value) {
+    this.setState({...this.state, loginFieldValue: value})
+  }
+
+  setLoggedInId() {
+    if(this.loginFieldValue !== null) {
+      window.localStorage.setItem("id", this.state.loginFieldValue);  
+      this.setState({...this.state, loginFieldValue: null, appState:IDLE });
+      
+    }
+  }
+
+  logout() {
+    let btn = window.document.getElementById("logout-button");
+    if(btn !== null) 
+      btn.classList.remove("shown");
+
+    window.localStorage.removeItem("id");
+    this.setState({...this.state, appState: LOGIN})
   }
 
   creditRemove = () => {

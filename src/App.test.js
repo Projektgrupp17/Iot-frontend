@@ -54,6 +54,45 @@ describe("App", () => {
         done()
       }, 100)
     });
+
+    it("login button visible when in login state", (done) => {
+      const app = mount(<App />);
+      setTimeout(() => {
+        app.update();
+        expect(app.find("#login-button").text()).to.equal("LOG IN")
+        app.unmount();
+        done()
+      }, 100)
+    });
+
+    it("logs in when entering value and clicking log in", (done) => {
+      const app = mount(<App />);
+      setTimeout(() => {
+        expect(app.instance().state.appState).to.equal("LOGIN");
+        app.update();
+        app.find("#login-input").simulate('change', { target: { value: '1' } })
+        app.find("#login-button").simulate('click');
+        expect(app.instance().state.appState).to.equal("IDLE");
+        expect(global.window.localStorage.getItem("id")).to.equal("1");
+        app.unmount();
+        done()
+      }, 100)
+    });
+
+    it("logs out when clicking logout", (done) => {
+      const app = mount(<App />);
+      setTimeout(() => {
+        app.update();
+        app.find("#login-input").simulate('change', { target: { value: '1' } })
+        app.find("#login-button").simulate('click');
+        app.update();
+        app.find("#logout-button").simulate('click')
+        expect(app.instance().state.appState).to.equal("LOGIN");
+        expect(global.window.localStorage.getItem("id")).to.equal(null);
+        app.unmount();
+        done()
+      }, 100)
+    });
   });
 
   describe("video presenter", () => {
