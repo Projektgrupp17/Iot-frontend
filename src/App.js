@@ -19,6 +19,7 @@ class App extends Component {
       loginFieldValue: null
     }
     window.onmousemove = this.onMouseMove.bind(this);
+    this.videoPlayer = React.createRef();
     this.initialPollWait = 3000;
   }
 
@@ -70,6 +71,15 @@ class App extends Component {
     }
   }
 
+  checkPlaybackFailure() {
+    setTimeout(() => {
+      if(!this.videoPlayer.current.player.isPlaying) {
+        console.log("Detected playback error, trying again")
+        this.setState({...this.state, appState: "IDLE"});
+      }
+    }, 3500)
+  }
+
   onProgress = (progress) => {
     //start fading out when video almost done
     let timeleftSec = -(progress.playedSeconds - progress.playedSeconds / progress.played);
@@ -100,6 +110,7 @@ class App extends Component {
         break;
       case PLAYING:
         this.hideScreensaver();
+        this.checkPlaybackFailure();
         break;
       case LOGIN:
         this.showCurtain();
@@ -154,6 +165,7 @@ class App extends Component {
       <div className="video-container">
         <div className="video-player-box" id="video-box">
           <ReactPlayer
+            ref={this.videoPlayer}
             onPlay={() => {this.hideCurtain()}}
             showinfo="false"
             width="1280px"
