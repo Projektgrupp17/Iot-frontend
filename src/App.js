@@ -89,6 +89,10 @@ class App extends Component {
       this.showScreenSaver();
   }
 
+  onDuration = (duration) => {
+    this.currentVideoLength = duration;
+  }
+
   onEnded = () => {
     return this.creditRemove()
       .catch(e => {
@@ -173,7 +177,8 @@ class App extends Component {
             url={this.state.video.url}
             playing={true}
             onEnded={() => { this.onEnded() }}
-            onProgress={p => this.onProgress(p)}
+            onProgress={p => { this.onProgress(p)}}
+            onDuration={d => {this.onDuration(d)}}
             id="video-player" />
         </div>
       </div>
@@ -241,7 +246,10 @@ class App extends Component {
   }
 
   creditRemove = () => {
-    return fetch(`${baseUrl}/views/${this.getCurrentId()}/${this.state.video.videoId}/${this.state.video.order}`, { method: 'POST' })
+    return fetch(`${baseUrl}/views/${this.getCurrentId()}/${this.state.video.videoId}/${this.state.video.order}`, { 
+      method: 'POST',
+      body: JSON.stringify({length_sec: this.currentVideoLength})
+    })
       .then(resp => {
         if (resp.status !== 200)
           console.error("Unexpected return status from remove credits: " + resp.status);
