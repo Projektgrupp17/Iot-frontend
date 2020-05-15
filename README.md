@@ -1,7 +1,11 @@
 # Iot-frontend
-This is the ad-presenter that would run on a raspberry pi or similar in the retail environment. 
+This is the ad-presenter that would run on a raspberry pi or similar in the retail environment.
 
 Plays videos when given an url by the backend, and logs them.
+
+The project is created with react, but since the application is very basic, it is implementation as just a state machine that uses the react setState hook, rather than a following full-fledged react coding-style.
+
+Tested with enzyme.
 
 ![Node.js CI](https://github.com/Projektgrupp17/Iot-frontend/workflows/Node.js%20CI/badge.svg)
 
